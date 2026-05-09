@@ -1,7 +1,11 @@
 package com.project.code.Model;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Store {
