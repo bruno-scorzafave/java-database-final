@@ -1,12 +1,14 @@
 package com.project.code.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
+@Table(name = "product", uniqueConstraints = @UniqueConstraint(columnNames = "sku"))
 public class Product {
 
     @Id
@@ -23,7 +25,6 @@ public class Product {
     private Double price;
 
     @NotNull
-    @Table(name = "product", uniqueConstraints = @UniqueConstraint(columnNames = "sku"))
     private String sku;
 
     @OneToMany(mappedBy = "product")
