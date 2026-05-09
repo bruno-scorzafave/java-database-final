@@ -88,10 +88,4 @@ public class OrderDetails {
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
     }
-// 8. Add @Entity annotation:
-//    - Use @Entity above the class name to mark it as a JPA entity.
-
-// 9. Add Getters and Setters:
-//    - Add getter and setter methods for all fields (id, customer, store, totalPrice, date, orderItems).
-  
 }
