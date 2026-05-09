@@ -10,7 +10,7 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull(message = "Name cannot be null")
     private String name;
@@ -23,7 +23,7 @@ public class Customer {
     
     @OneToMany(mappedBy = "custumer", fetch = FetchType.EAGER)
     @JsonManagedReference
-    private OrderDetails orderDetails;
+    private List orders;
 
     public Long getId() {
         return id;
@@ -55,5 +55,13 @@ public class Customer {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public List getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List orders) {
+        this.orders = orders;
     }
 }
