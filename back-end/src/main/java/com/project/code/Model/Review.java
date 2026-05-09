@@ -1,7 +1,9 @@
 package com.project.code.Model;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "reviews")
 public class Review {
