@@ -29,8 +29,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @JsonManagedReference("inventory-product")
     private List inventory;
-// 8. Add Getters and Setters:
-//    - Add getter and setter methods for all fields (id, name, category, price, sku).
+
     public Long getId() {
         return id;
     }
