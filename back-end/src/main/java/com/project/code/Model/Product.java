@@ -71,11 +71,11 @@ public class Product {
         this.sku = sku;
     }
 
-    public List getInventoryList() {
+    public List getInventory() {
         return inventory;
     }
 
-    public void setInventoryList(List inventory) {
+    public void setInventory(List inventory) {
         this.inventory = inventory;
     }
 }
