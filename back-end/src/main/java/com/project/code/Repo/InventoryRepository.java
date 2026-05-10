@@ -2,12 +2,14 @@ package com.project.code.Repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
+    @Query("SELECT i FROM Inventory i WHERE i.product.id = :productId AND i.store.id = :storeId")
     public Inventory findByProductIdandStoreId(Long productId, Long storeId);
 
     public List<Inventory> findByStoreId(Long storeId);
