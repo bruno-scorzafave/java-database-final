@@ -72,11 +72,11 @@ public class Review {
         this.rating = rating;
     }
 
-    public Sting getComment() {
+    public String getComment() {
         return comment;
     }
 
-    public void setComment(Sting comment) {
+    public void setComment(String comment) {
         this.comment = comment;
     }
 }

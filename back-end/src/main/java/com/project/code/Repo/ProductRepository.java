@@ -1,5 +1,9 @@
 package com.project.code.Repo;
 
+import com.project.code.Model.Product;
+
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,8 +20,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     public Product findBySku(String sku);
 
     public Product findByName(String name);
-
-    public Product findById(Long id);
 
     @Query("SELECT i.product FROM Inventory i WHERE i.store.id = :storeId AND LOWER(i.product.name) LIKE LOWER(CONCAT('%', :pname, '%'))")
     public List<Product> findByNameLike(Long storeId, String pname);
