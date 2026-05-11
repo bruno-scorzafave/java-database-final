@@ -4,6 +4,7 @@ import com.project.code.Repo.ProductRepository;
 import com.project.code.Repo.InventoryRepository;
 import com.project.code.Service.ServiceClass;
 import com.project.code.Model.CombinedRequest;
+import com.project.code.Model.Inventory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -87,7 +88,7 @@ public class InventoryController {
         return map;
     }
 
-    @GetMapping("/{storeid}")
+    @GetMapping("/{storeId}")
     public Map<String, Object> getAllProducts(@PathVariable Long storeId) {
         Map<String, Object> map = new HashMap<>();
         map.put("products", productRepository.findProductsByStoreId(storeId));
@@ -95,26 +96,26 @@ public class InventoryController {
         return map;
     }
 
-    @GetMapping("filter/{category}/{name}/{storeid}")
-    public Map<String, Object> getProductName(@PathVariable String category, @PathVariable String name, @PathVariable long storeid) {
+    @GetMapping("filter/{category}/{name}/{storeId}")
+    public Map<String, Object> getProductName(@PathVariable String category, @PathVariable String name, @PathVariable Long storeId) {
         Map<String, Object> map = new HashMap<>();
         
         if (category.equals(null)) {
-            map.put("product", productRepository.findByNameLike(storeid, name));
+            map.put("product", productRepository.findByNameLike(storeId, name));
         } else if (name.equals(null)) {
-            map.put("product", productRepository.findByCategoryAndStoreId(storeid, category));
+            map.put("product", productRepository.findByCategoryAndStoreId(storeId, category));
         } else {
-            map.put("product", productRepository.findByNameAndCategory(storeid, name, category));
+            map.put("product", productRepository.findByNameAndCategory(storeId, name, category));
         }
 
         return map;
     }
 
     @GetMapping("search/{name}/{storeId}")
-    public Map<String, Object> searchProduct(@PathVariable String name, @PathVariable long storeid) {
+    public Map<String, Object> searchProduct(@PathVariable String name, @PathVariable Long storeId) {
         Map<String, Object> map = new HashMap<>();
 
-        map.put("product", productRepository.findByNameLike(storeid, name));
+        map.put("product", productRepository.findByNameLike(storeId, name));
 
         return map;
     }
@@ -124,26 +125,24 @@ public class InventoryController {
         Map<String, Object> map = new HashMap<>();
 
         if (!serviceClass.validateProductId(id)) {
-            map.put("message", "Product not present in database");
+            map.put("message", "Product with id " + id + " not present in database");
+            return map;
         }
+
+        inventoryRepository.deleteByProductId(id);
+        map.put("message", "Product with id " + id + " deleted in database");
 
         return map;
     }
-// 7. Define the `searchProduct` Method:
-//    - This method handles HTTP GET requests to search for products by name within a specific store.
-//    - It uses `name` and `storeId` as parameters and searches for products that match the `name` in the specified store.
-//    - The search results are returned in the response with the key `"product"`.
 
+    @GetMapping("validate/{quantity}/{storeId}/{productId}")
+    public boolean validateQuantity(@PathVariable int quantity, @PathVariable Long storeId, @PathVariable Long productId) {
+        Inventory inventory = inventoryRepository.findByProductIdandStoreId(productId, storeId);
 
-// 8. Define the `removeProduct` Method:
-//    - This method handles HTTP DELETE requests to delete a product by its ID.
-//    - It first validates if the product exists. If it does, it deletes the product from the `ProductRepository` and also removes the related inventory entry from the `InventoryRepository`.
-//    - Returns a success message with the key `"message"` indicating successful deletion.
+        if (quantity <= inventory.getStockLevel()) {
+            return true;
+        }
 
-
-// 9. Define the `validateQuantity` Method:
-//    - This method handles HTTP GET requests to validate if a specified quantity of a product is available in stock for a given store.
-//    - It checks the inventory for the product in the specified store and compares it to the requested quantity.
-//    - If sufficient stock is available, return `true`; otherwise, return `false`.
-
+        return false;
+    }
 }
