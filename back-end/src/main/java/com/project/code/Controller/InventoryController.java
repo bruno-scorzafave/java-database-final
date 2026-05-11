@@ -1,24 +1,65 @@
 package com.project.code.Controller;
 
+import com.project.code.Repo.ProductRepository;
+import com.project.code.Repo.InventoryRepository;
+import com.project.code.Service.ServiceClass;
+import com.project.code.Model.CombinedRequest;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.dao.DataIntegrityViolationException;
+
+@RestController
+@RequestMapping("/inventory")
 public class InventoryController {
-// 1. Set Up the Controller Class:
-//    - Annotate the class with `@RestController` to indicate that this is a REST controller, which handles HTTP requests and responses.
-//    - Use `@RequestMapping("/inventory")` to set the base URL path for all methods in this controller. All endpoints related to inventory will be prefixed with `/inventory`.
 
+    @Autowired
+    ProductRepository productRepository;
 
-// 2. Autowired Dependencies:
-//    - Autowire necessary repositories and services:
-//      - `ProductRepository` will be used to interact with product data (i.e., finding, updating products).
-//      - `InventoryRepository` will handle CRUD operations related to the inventory.
-//      - `ServiceClass` will help with the validation logic (e.g., validating product IDs and inventory data).
+    @Autowired
+    InventoryRepository inventoryRepository;
 
+    @Autowired
+    ServiceClass serviceClass;
 
-// 3. Define the `updateInventory` Method:
-//    - This method handles HTTP PUT requests to update inventory for a product.
-//    - It takes a `CombinedRequest` (containing `Product` and `Inventory`) in the request body.
-//    - The product ID is validated, and if valid, the inventory is updated in the database.
-//    - If the inventory exists, update it and return a success message. If not, return a message indicating no data available.
+    @PutMapping
+    public Map<String,String> updateInventory(@RequestBody CombinedRequest combinedRequest) {
+        Inventory inventory = combinedRequest.getInventory();
+        Map<String, String> map = new HashMap<>();
+        
+        if (!serviceClass.validateProductId(combinedRequest.getProduct().getId())) {
+            map.put("message", "Id " + combinedRequest.getProduct().getId() + " not present in database");
+            return map;
+        }
 
+        if (inventory != null) {
+            try {
+                Inventory result = serviceClass.getInventoryId(inventory);
+
+                if (result != null) {
+                    inventory.setId(result.getId());
+                    inventoryRepository.save(inventory);
+                } else {
+                    map.put("message", "No data available for this product or store id");
+                    return map;
+                }
+            } catch (DataIntegrityViolationException e) {
+                map.put("message", "Error: " + e);
+                System.out.println(e);
+                return map;
+            } catch (Exception e) {
+                map.put("message", "Error: " + e);
+                System.out.println(e);
+                return map;
+            }
+
+            return map;
+        }
+    }
 
 // 4. Define the `saveInventory` Method:
 //    - This method handles HTTP POST requests to save a new inventory entry.
