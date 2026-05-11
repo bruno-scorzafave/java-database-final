@@ -8,6 +8,7 @@ import com.project.code.Model.CombinedRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.lang.Object;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -61,24 +62,73 @@ public class InventoryController {
         }
     }
 
-// 4. Define the `saveInventory` Method:
-//    - This method handles HTTP POST requests to save a new inventory entry.
-//    - It accepts an `Inventory` object in the request body.
-//    - It first validates whether the inventory already exists. If it exists, it returns a message stating so. If it doesn’t exist, it saves the inventory and returns a success message.
+    @PostMapping
+    public Map<String, String> saveInventory(Inventory inventory) {
+        Map<String, String> map = new HashMap<>();
+        
+        if (!serviceClass.validateInventory(inventory)) {
+            map.put("message", "Data already present");
+            return map;
+        }
 
+        try {
+            inventoryRepository.save(inventory);
+            map.put("message", "Data saved successfully");
+        } catch (DataIntegrityViolationException e) {
+            map.put("message", "Error: " + e);
+            System.out.println(e);
+            return map;
+        } catch (Exception e) {
+            map.put("message", "Error: " + e);
+            System.out.println(e);
+            return map;
+        }
+        
+        return map;
+    }
 
-// 5. Define the `getAllProducts` Method:
-//    - This method handles HTTP GET requests to retrieve products for a specific store.
-//    - It uses the `storeId` as a path variable and fetches the list of products from the database for the given store.
-//    - The products are returned in a `Map` with the key `"products"`.
+    @GetMapping("/{storeid}")
+    public Map<String, Object> getAllProducts(@PathVariable Long storeId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("products", productRepository.findProductsByStoreId(storeId));
 
+        return map;
+    }
 
-// 6. Define the `getProductName` Method:
-//    - This method handles HTTP GET requests to filter products by category and name.
-//    - If either the category or name is `"null"`, adjust the filtering logic accordingly.
-//    - Return the filtered products in the response with the key `"product"`.
+    @GetMapping("filter/{category}/{name}/{storeid}")
+    public Map<String, Object> getProductName(@PathVariable String category, @PathVariable String name, @PathVariable long storeid) {
+        Map<String, Object> map = new HashMap<>();
+        
+        if (category.equals(null)) {
+            map.put("product", productRepository.findByNameLike(storeid, name));
+        } else if (name.equals(null)) {
+            map.put("product", productRepository.findByCategoryAndStoreId(storeid, category));
+        } else {
+            map.put("product", productRepository.findByNameAndCategory(storeid, name, category));
+        }
 
+        return map;
+    }
 
+    @GetMapping("search/{name}/{storeId}")
+    public Map<String, Object> searchProduct(@PathVariable String name, @PathVariable long storeid) {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("product", productRepository.findByNameLike(storeid, name));
+
+        return map;
+    }
+
+    @DeleteMapping("/{id}")
+    public Map<String, String> removeProduct(@PathVariable Long id) {
+        Map<String, Object> map = new HashMap<>();
+
+        if (!serviceClass.validateProductId(id)) {
+            map.put("message", "Product not present in database");
+        }
+
+        return map;
+    }
 // 7. Define the `searchProduct` Method:
 //    - This method handles HTTP GET requests to search for products by name within a specific store.
 //    - It uses `name` and `storeId` as parameters and searches for products that match the `name` in the specified store.
