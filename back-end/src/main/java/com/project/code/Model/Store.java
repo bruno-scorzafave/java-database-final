@@ -23,7 +23,7 @@ public class Store {
 
     @OneToMany(mappedBy = "store")
     @JsonManagedReference("inventory-store")
-    private List inventory;
+    private List<Inventory> inventory;
 
     public Store(String name, String address) {
         this.name = name;

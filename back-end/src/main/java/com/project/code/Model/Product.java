@@ -29,7 +29,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     @JsonManagedReference("inventory-product")
-    private List inventory;
+    private List<Inventory> inventory;
 
     public Long getId() {
         return id;
