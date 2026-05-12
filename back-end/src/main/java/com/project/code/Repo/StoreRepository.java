@@ -14,4 +14,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query("SELECT i FROM Store i WHERE LOWER(i.name) LIKE LOWER(CONCAT('%', :pname, '%'))")
     public List<Store> findBySubName(String pname);
 
+    public Store findByid(Long id);;
+
 }
