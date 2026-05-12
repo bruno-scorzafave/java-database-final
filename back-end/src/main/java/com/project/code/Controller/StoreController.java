@@ -53,9 +53,7 @@ public class StoreController {
         } catch (Exception e) {
             map.put("Error", "" + e);
         }
-        - Return a success message with key `message` if the order is successfully placed.
-//    - Return an error message with key `Error` if there is an issue processing the order.
 
-
-   
+        return map;
+        
 }
