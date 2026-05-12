@@ -60,7 +60,7 @@ public class OrderService {
         // List listOrderItems = orderDetails.getOrderItems();
 
         for(PurchaseProductDTO purchaseProduct : placeOrderRequestDTO.getPurchaseProduct()) {
-            Product product = productRepository.findById(purchaseProduct.getId());
+            Product product = productRepository.findByid(purchaseProduct.getId());
             
             OrderItem orderItem = new OrderItem(orderDetails, product, purchaseProduct.getQuantity(), purchaseProduct.getPrice() * purchaseProduct.getQuantity());
             orderItemRepository.save(orderItem);

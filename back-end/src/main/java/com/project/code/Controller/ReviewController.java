@@ -27,7 +27,7 @@ public class ReviewController {
     public Map<String, Object> getReviews(@PathVariable Long storeId, @PathVariable Long productId) {
         Map<String, Object> map = new HashMap<>();
 
-        List reviews = reviewRepository.findByStoreIdAndProductId(storeId, productId);
+        List<Review> reviews = reviewRepository.findByStoreIdAndProductId(storeId, productId);
 
         List<Map<String, Object>> reviewsWithCustomerNames = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class ReviewController {
             reviewMap.put("review", review.getComment());
             reviewMap.put("rating", review.getRating());
 
-            Customer customer = customerRepository.findById(review.getCustomerId());
+            Customer customer = customerRepository.findByid(review.getCustomerId());
 
             if (customer != null) {
                 reviewMap.put("customerName", customer.getName());
