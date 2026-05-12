@@ -1,0 +1,15 @@
+DELIMITER $
+
+CREATE PROCEDURE GetAggregateSalesForCompany(IN year INT, IN month INT)
+BEGIN
+    SELECT
+        SUM(DISTINCT od.total_price) AS total_sales,
+        MONTH(od.date) as sale_month,
+        YEAR(od.date) as sale_year
+    FROM order_details od JOIN order_item oi ON od.id = oi.order_id
+    WHERE YEAR(od.date)=year AND MONTH(od.date)=month
+    GROUP BY MONTH(od.date),YEAR(od.date);
+    
+END $
+
+DELIMITER ;
