@@ -5,6 +5,7 @@ import com.project.code.Repo.InventoryRepository;
 import com.project.code.Service.ServiceClass;
 import com.project.code.Model.Product;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class ProductController {
     @GetMapping("/product/{id}")
     public Map<String, Object> getProductbyId(@PathVariable Long id) {
         Map<String, Object> map = new HashMap<>();
-        Product result = productRepository.findById(id);
+        Product result = productRepository.findByid(id);
 
         map.put("products", result);
 
@@ -79,7 +80,7 @@ public class ProductController {
         if (name.equals(null)) {
             map.put("products", productRepository.findByCategory(category));
         } else if (category.equals(null)) {
-            map.put("products", productRepository.findBy(name));
+            map.put("products", productRepository.findByName(name));
         } else {
             map.put("products", productRepository.findProductBySubNameAndCategory(name, category));
         }

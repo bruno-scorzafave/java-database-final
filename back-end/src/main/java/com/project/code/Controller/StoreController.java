@@ -1,11 +1,11 @@
 package com.project.code.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
+@RestController
+@RequestMapping("/store")
 public class StoreController {
-// 1. Set Up the Controller Class:
-//    - Annotate the class with `@RestController` to designate it as a REST controller for handling HTTP requests.
-//    - Map the class to the `/store` URL using `@RequestMapping("/store")`.
-
 
  // 2. Autowired Dependencies:
 //    - Inject the following dependencies via `@Autowired`:

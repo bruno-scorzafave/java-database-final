@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class OrderService {
@@ -30,7 +31,7 @@ public class OrderService {
     private InventoryRepository inventoryRepository;
 
     @Autowired
-    private CustumerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
     private StoreRepository storeRepository;
@@ -39,21 +40,21 @@ public class OrderService {
     private OrderDetailsRepository oderDetailsRepository;
 
     @Autowired
-    private OrderItemRepository OrderItemRepository;
+    private OrderItemRepository orderItemRepository;
 
     public void saveOrder(PlaceOrderRequestDTO placeOrderRequestDTO) {
         Customer customer = customerRepository.findByEmail(placeOrderRequestDTO.getCustomerEmail());
 
         if(customer == null) {
             customer = new Customer();
-            customer.setName(placeOrderRequestDTO.getCostumerName());
-            customer.setEmail(placeOrderRequestDTO.getCostumerEmail());
-            customer.setPhone(placeOrderRequestDTO.getCostumerPhone());
+            customer.setName(placeOrderRequestDTO.getCustomerName());
+            customer.setEmail(placeOrderRequestDTO.getCustomerEmail());
+            customer.setPhone(placeOrderRequestDTO.getCustomerPhone());
         }
 
         customerRepository.save(customer);
 
-        Store store = storeRepository.findById(placeOrderRequest.getStoreId()).orElseThrow(() -> new RuntimeException("Store not found"));
+        Store store = storeRepository.findById(placeOrderRequestDTO.getStoreId()).orElseThrow(() -> new RuntimeException("Store not found"));
 
         OrderDetails orderDetails = new OrderDetails(customer, store, placeOrderRequestDTO.getTotalPrice(), java.time.LocalDateTime.now());
         // List listOrderItems = orderDetails.getOrderItems();

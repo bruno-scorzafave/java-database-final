@@ -39,7 +39,7 @@ public class ServiceClass {
     }
 
     public boolean validateProductId(Long id) {
-        Product result = productRepository.findByid(product.getId());
+        Product result = productRepository.findById(id);
 
         if(result == null) {
             return false;
@@ -48,7 +48,7 @@ public class ServiceClass {
         return true;
     }
 
-    public boolean getInventoryId(Inventory inventory) {
+    public Inventory getInventoryId(Inventory inventory) {
         Inventory result = inventoryRepository.findByProductIdandStoreId(inventory.getProduct().getId(), inventory.getStore().getId());
 
         return result;

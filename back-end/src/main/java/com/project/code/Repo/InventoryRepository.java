@@ -1,5 +1,6 @@
 package com.project.code.Repo;
 
+import com.project.code.Model.Inventory;
 
 import java.util.List;
 

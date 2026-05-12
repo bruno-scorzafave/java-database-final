@@ -61,6 +61,8 @@ public class InventoryController {
 
             return map;
         }
+
+        return map;
     }
 
     @PostMapping
@@ -122,7 +124,7 @@ public class InventoryController {
 
     @DeleteMapping("/{id}")
     public Map<String, String> removeProduct(@PathVariable Long id) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
 
         if (!serviceClass.validateProductId(id)) {
             map.put("message", "Product with id " + id + " not present in database");
