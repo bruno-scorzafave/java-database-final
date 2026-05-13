@@ -23,7 +23,7 @@ public class Customer {
     @NotNull(message = "Phone cannot be null")
     private String phone;
     
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderDetails> orders;
 
