@@ -2,6 +2,7 @@ package com.project.code.Controller;
 
 import com.project.code.Repo.ProductRepository;
 import com.project.code.Repo.InventoryRepository;
+import com.project.code.Repo.OrderItemRepository;
 import com.project.code.Service.ServiceClass;
 import com.project.code.Model.Product;
 
@@ -21,6 +22,9 @@ public class ProductController {
 
     @Autowired
     InventoryRepository inventoryRepository;
+
+    @Autowired
+    OrderItemRepository orderItemRepository;
 
     @Autowired
     ServiceClass serviceClass;
@@ -77,9 +81,9 @@ public class ProductController {
     public Map<String, Object> filterbyCategoryProduct(@PathVariable String name, @PathVariable String category) {
         Map<String, Object> map = new HashMap<>();
         
-        if (name.equals(null)) {
+        if (name.equals("null")) {
             map.put("products", productRepository.findByCategory(category));
-        } else if (category.equals(null)) {
+        } else if (category.equals("null")) {
             map.put("products", productRepository.findByName(name));
         } else {
             map.put("products", productRepository.findProductBySubNameAndCategory(name, category));
@@ -116,6 +120,7 @@ public class ProductController {
         }
 
         inventoryRepository.deleteByProductId(id);
+        orderItemRepository.deleteByProductId(id);
         productRepository.deleteById(id);
 
         map.put("message", "Product successfully deleted from database");

@@ -25,6 +25,8 @@ public class Review {
 
     private String comment;
 
+    public Review() {}
+
     public Review(Long customerId, Long productId, Long storeId, Integer rating) {
         this.customerId = customerId;
         this.productId = productId;
