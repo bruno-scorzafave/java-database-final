@@ -5,6 +5,7 @@ import com.project.code.Repo.InventoryRepository;
 import com.project.code.Service.ServiceClass;
 import com.project.code.Model.CombinedRequest;
 import com.project.code.Model.Inventory;
+import com.project.code.Model.Product;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ public class InventoryController {
 
     @PutMapping
     public Map<String,String> updateInventory(@RequestBody CombinedRequest combinedRequest) {
+        Product product = combinedRequest.getProduct();
         Inventory inventory = combinedRequest.getInventory();
         Map<String, String> map = new HashMap<>();
         
@@ -37,6 +39,9 @@ public class InventoryController {
             map.put("message", "Id " + combinedRequest.getProduct().getId() + " not present in database");
             return map;
         }
+
+        productRepository.save(product);
+        map.put("message", "Successfully updated product with id: " + product.getId());
 
         if (inventory != null) {
             try {
