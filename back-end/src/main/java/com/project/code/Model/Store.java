@@ -22,7 +22,6 @@ public class Store {
     private String address;
 
     @OneToMany(mappedBy = "store")
-    @JsonManagedReference("inventory-store")
     private List<Inventory> inventory;
 
     public Store() {}
